@@ -1,1 +1,1 @@
-# EveryWear.github.io
+# everywear.github.io
