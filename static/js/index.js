@@ -26,8 +26,8 @@ window.addEventListener('load', function() {
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
-    // OrbitControls
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    // 注意：这里改为 new OrbitControls（而非 THREE.OrbitControls）
+    const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 1, 0);
     controls.update();
 
@@ -40,8 +40,8 @@ window.addEventListener('load', function() {
     dirLight.position.set(3, 10, 10);
     scene.add(dirLight);
 
-    // 加载 SMPL glb 模型
-    const loader = new THREE.GLTFLoader();
+    // 注意：这里改为 new GLTFLoader（而非 THREE.GLTFLoader）
+    const loader = new GLTFLoader();
     loader.load('static/models/smpl_model.glb', function(gltf) {
         const model = gltf.scene;
         model.position.set(0, 0, 0);
