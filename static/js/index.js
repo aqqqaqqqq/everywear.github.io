@@ -31,6 +31,7 @@ window.addEventListener('load', function() {
         1000
     );
     camera.position.set(0, 1.5, 1.5);
+    console.log('摄像机初始位置：', camera.position);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
