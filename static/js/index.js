@@ -30,7 +30,7 @@ window.addEventListener('load', function() {
         0.1,
         1000
     );
-    camera.position.set(0, 1.0, 2.0);
+    camera.position.set(0, 0, 2.0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
