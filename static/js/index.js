@@ -15,7 +15,7 @@ $(document).ready(function() {
     bulmaSlider.attach();
 })
 
-const container = document.getElementById('container');
+const container = document.getElementById('smpl-container');
 
 // ----------- Three.js 基本设置 -----------
 const scene = new THREE.Scene();
