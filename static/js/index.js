@@ -85,48 +85,51 @@ window.addEventListener('load', function() {
     // ==============================
     // 加载 GLB 函数（动态切换）
     // ==============================
+    let currentModel = null;
+    let mixer = null;
+    let loadId = 0; // 每次加载都会递增
+    
     function loadGLB(path) {
-
-        // clear old model
+        const thisLoadId = ++loadId; // 记录当前加载编号
+    
+        // 移除旧模型
         if (currentModel) {
             scene.remove(currentModel);
-
             if (mixer) {
                 mixer.stopAllAction();
                 mixer.uncacheRoot(currentModel);
                 mixer = null;
             }
-
             disposeModel(currentModel);
             currentModel = null;
-
-            renderer.clear(); // 清理缓存
+            renderer.clear();
         }
-
+    
         loader.load(path, function(gltf) {
+            // 检查是否仍然是最新加载
+            if (thisLoadId !== loadId) {
+                // 已经被新的加载覆盖，直接丢弃
+                disposeModel(gltf.scene);
+                return;
+            }
+    
             currentModel = gltf.scene;
             scene.add(currentModel);
-
-            // ===== 播放动画 =====
+    
             if (gltf.animations && gltf.animations.length > 0) {
                 mixer = new THREE.AnimationMixer(currentModel);
                 const action = mixer.clipAction(gltf.animations[0]);
                 action.play();
-                console.log("Loaded animation:", path);
-            } else {
-                console.warn("No animation found in", path);
             }
-
-            // ===== 模型居中 =====
+    
+            // 模型居中
             const box = new THREE.Box3().setFromObject(currentModel);
             const center = new THREE.Vector3();
             box.getCenter(center);
-
-            // 默认视角重置
+    
             camera.position.set(center.x, center.y, center.z + 3);
             controls.target.copy(center);
             controls.update();
-
         }, undefined, err => {
             console.error("Failed to load GLB:", err);
         });
