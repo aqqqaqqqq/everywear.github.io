@@ -112,6 +112,34 @@ window.addEventListener('load', function() {
             }
     
             currentModel = gltf.scene;
+
+            currentModel.traverse((child) => {
+                if (child.isMesh && child.geometry && child.geometry.attributes.color) {
+                    // 如果几何体有顶点颜色，启用它
+                    console.log('Found vertex colors in:', child.name);
+                    
+                    // 确保材质支持顶点颜色
+                    if (child.material) {
+                        // 如果使用ShaderMaterial或自定义材质
+                        if (child.material.vertexColors === undefined) {
+                            // 创建支持顶点颜色的新材质
+                            const newMaterial = new THREE.MeshStandardMaterial({
+                                color: 0xffffff, // 基础颜色设为白色
+                                vertexColors: true, // 启用顶点颜色
+                                metalness: 0.1,
+                                roughness: 0.8,
+                                side: THREE.DoubleSide
+                            });
+                            child.material = newMaterial;
+                        } else {
+                            // 已有材质，启用顶点颜色
+                            child.material.vertexColors = true;
+                            child.material.needsUpdate = true;
+                        }
+                    }
+                }
+            });
+            
             scene.add(currentModel);
     
             if (gltf.animations && gltf.animations.length > 0) {
