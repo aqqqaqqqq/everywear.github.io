@@ -59,8 +59,6 @@ window.addEventListener('load', function() {
     scene.add(ambient);
 
     // ============ 动画相关 ============
-    let mixer = null;
-    let currentModel = null;
     const clock = new THREE.Clock();
     const loader = new GLTFLoader();
 
