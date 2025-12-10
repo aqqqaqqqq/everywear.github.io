@@ -13,7 +13,7 @@ window.addEventListener('load', function() {
 
     const container = document.getElementById('smpl-container');
     if (!container) {
-        console.error('smpl-container 元素不存在！');
+        console.error('smpl-container not found！');
         return;
     }
 
@@ -64,28 +64,44 @@ window.addEventListener('load', function() {
     const clock = new THREE.Clock();
     const loader = new GLTFLoader();
 
+    function disposeModel(model) {
+        if (!model) return;
+
+        model.traverse(obj => {
+            if (obj.geometry) obj.geometry.dispose();
+
+            if (obj.material) {
+                const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
+                materials.forEach(m => {
+                    for (const key in m) {
+                        if (m[key] && m[key].isTexture) m[key].dispose();
+                    }
+                    m.dispose();
+                });
+            }
+        });
+    }
+
     // ==============================
     // 加载 GLB 函数（动态切换）
     // ==============================
     function loadGLB(path) {
 
-        // 清除旧模型
+        // clear old model
         if (currentModel) {
             scene.remove(currentModel);
-            currentModel.traverse(obj => {
-                if (obj.geometry) obj.geometry.dispose();
-                if (obj.material) {
-                    if (Array.isArray(obj.material)) {
-                        obj.material.forEach(m => m.dispose());
-                    } else {
-                        obj.material.dispose();
-                    }
-                }
-            });
-            currentModel = null;
-        }
 
-        mixer = null;
+            if (mixer) {
+                mixer.stopAllAction();
+                mixer.uncacheRoot(currentModel);
+                mixer = null;
+            }
+
+            disposeModel(currentModel);
+            currentModel = null;
+
+            renderer.clear(); // 清理缓存
+        }
 
         loader.load(path, function(gltf) {
             currentModel = gltf.scene;
