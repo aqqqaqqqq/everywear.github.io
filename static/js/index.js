@@ -64,22 +64,22 @@ window.addEventListener('load', function() {
     controls.update();
 
     // Lighting
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 3.0);
     keyLight.position.set(3, 5, 5);
     keyLight.castShadow = false;
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 2.0);
     fillLight.position.set(-5, 2, 2);
     fillLight.castShadow = false;
     scene.add(fillLight);
 
-    const rimLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    const rimLight = new THREE.DirectionalLight(0xffffff, 3.0);
     rimLight.position.set(0, 3, -5);
     rimLight.castShadow = false;
     scene.add(rimLight);
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+    const ambient = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambient);
     const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 1.0);
     scene.add(hemi);
@@ -155,6 +155,8 @@ window.addEventListener('load', function() {
                         if (child.material) {
                             // 创建材质副本，避免修改原始材质
                             const newMaterial = child.material.clone();
+                            newMaterial.emissive = new THREE.Color(0x222222);  // 增加自发光
+                            newMaterial.emissiveIntensity = 0.2;              // 自发光强度
                             newMaterial.vertexColors = true;
                             newMaterial.needsUpdate = true;
                             child.material = newMaterial;
@@ -163,8 +165,9 @@ window.addEventListener('load', function() {
                             child.material = new THREE.MeshStandardMaterial({
                                 vertexColors: true,
                                 side: THREE.DoubleSide,
-                                metalness: 0.3,
-                                roughness: 0.7,
+                                metalness: 0.1,
+                                roughness: 0.3,
+                                envMapIntensity: 1.0,
                                 flatShading: false
                             });
                         }
