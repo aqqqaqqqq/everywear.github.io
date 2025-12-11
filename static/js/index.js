@@ -3,6 +3,28 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 window.addEventListener('load', function() {
+    const gallery = document.getElementById("videoGalleryStairs");
+    if (gallery) {
+        const leftBtn = document.getElementById("scrollLeftBtnStairs");
+        const rightBtn = document.getElementById("scrollRightBtnStairs");
+
+        const videoWidth = 205;
+        let offset = 0;
+        const maxOffset = -(gallery.children.length - 5) * videoWidth;
+
+        rightBtn.addEventListener("click", () => {
+            offset -= videoWidth;
+            if (offset < maxOffset) offset = maxOffset;
+            gallery.style.transform = `translateX(${offset}px)`;
+        });
+
+        leftBtn.addEventListener("click", () => {
+            offset += videoWidth;
+            if (offset > 0) offset = 0;
+            gallery.style.transform = `translateX(${offset}px)`;
+        });
+    }
+    
     var carousels = bulmaCarousel.attach('.carousel', {
         slidesToScroll: 1,
         slidesToShow: 1,
