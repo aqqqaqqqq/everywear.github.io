@@ -64,15 +64,23 @@ window.addEventListener('load', function() {
     controls.update();
 
     // Lighting
-    const softLight = new THREE.DirectionalLight(0xffffff, 1.2);
-    softLight.position.set(3, 5, 5);
-    scene.add(softLight);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    keyLight.position.set(3, 5, 5);
+    scene.add(keyLight);
+    
+    const fillLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    fillLight.position.set(-4, 2, -3);
+    scene.add(fillLight);
+    
+    const topLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    topLight.position.set(0, 6, 0);
+    scene.add(topLight);
+
     const ambient = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambient);
     const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 2.0);
     scene.add(hemi);
 
-    // ============ 动画相关 ============
     const clock = new THREE.Clock();
     const loader = new GLTFLoader();
 
@@ -94,17 +102,13 @@ window.addEventListener('load', function() {
         });
     }
 
-    // ==============================
-    // 加载 GLB 函数（动态切换）
-    // ==============================
     let currentModel = null;
     let mixer = null;
-    let loadId = 0; // 每次加载都会递增
+    let loadId = 0;
     
     function loadGLB(path) {
-        const thisLoadId = ++loadId; // 记录当前加载编号
+        const thisLoadId = ++loadId;
     
-        // 移除旧模型
         if (currentModel) {
             scene.remove(currentModel);
             if (mixer) {
@@ -118,9 +122,7 @@ window.addEventListener('load', function() {
         }
     
         loader.load(path, function(gltf) {
-            // 检查是否仍然是最新加载
             if (thisLoadId !== loadId) {
-                // 已经被新的加载覆盖，直接丢弃
                 disposeModel(gltf.scene);
                 return;
             }
@@ -136,32 +138,19 @@ window.addEventListener('load', function() {
             });
             
             if (hasVertexColors) {
-                // 正确应用顶点颜色，同时保留材质的其他属性
                 currentModel.traverse((child) => {
                     if (child.isMesh && child.geometry && child.geometry.attributes.color) {
-                        // 方法1: 在原始材质基础上启用顶点颜色
                         if (child.material) {
-                            console.log("模型有原始材质");
-                            // 创建材质副本，避免修改原始材质
                             const newMaterial = child.material.clone();
                             newMaterial.emissive = new THREE.Color(0x222222);  // 增加自发光
                             newMaterial.emissiveIntensity = 0.6;              // 自发光强度
                             newMaterial.vertexColors = true;
                             newMaterial.needsUpdate = true;
+                            newMaterial.roughness = 0.2;      // 降低粗糙度
+                            newMaterial.metalness = 0.0;      // 无金属感
+                            newMaterial.envMapIntensity = 2.0; // 环境贴图强度
                             child.material = newMaterial;
-                        } else {
-                            // 如果没有材质，创建一个新材质
-                            child.material = new THREE.MeshStandardMaterial({
-                                vertexColors: true,
-                                side: THREE.DoubleSide,
-                                metalness: 0.1,
-                                roughness: 0.3,
-                                envMapIntensity: 1.0,
-                                flatShading: false
-                            });
                         }
-                        
-                        // 确保几何体标记为需要更新
                         child.geometry.attributes.color.needsUpdate = true;
                         child.geometry.attributes.position.needsUpdate = true;
                     }
@@ -178,7 +167,6 @@ window.addEventListener('load', function() {
                 action.play();
             }
     
-            // 模型居中
             const box = new THREE.Box3().setFromObject(currentModel);
             const center = new THREE.Vector3();
             box.getCenter(center);
@@ -191,16 +179,11 @@ window.addEventListener('load', function() {
         });
     }
 
-    // ==============================
-    // 监听下拉框
-    // ==============================
     const selector = document.getElementById("glb-selector");
     if (selector) {
         selector.addEventListener("change", function() {
             loadGLB(this.value);
         });
-
-        // 初始加载默认模型
         loadGLB(selector.value);
     }
 
