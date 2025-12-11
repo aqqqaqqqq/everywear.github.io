@@ -7,18 +7,18 @@ window.addEventListener('load', function() {
     if (gallery) {
         const leftBtn = document.getElementById("scrollLeftBtnStairs");
         const rightBtn = document.getElementById("scrollRightBtnStairs");
-
-        const videoWidth = 180 + 16;
-        const items = gallery.querySelectorAll(".video-item").length;
-        let offset = 0;
-        const maxOffset = -(items - 5) * videoWidth;
-
+        const items = gallery.querySelectorAll(".video-item");
+        const videoWidth = 170;
+        const gap = 10;
+        const slideWidth = videoWidth + gap;
+        const viewportWidth = document.querySelector(".video-viewport").offsetWidth;
+        const totalWidth = items.length * slideWidth - gap;
+        const maxOffset = -(totalWidth - viewportWidth);
         rightBtn.addEventListener("click", () => {
             offset -= videoWidth;
             if (offset < maxOffset) offset = maxOffset;
             gallery.style.transform = `translateX(${offset}px)`;
         });
-
         leftBtn.addEventListener("click", () => {
             offset += videoWidth;
             if (offset > 0) offset = 0;
