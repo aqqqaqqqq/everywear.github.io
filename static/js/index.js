@@ -64,6 +64,9 @@ window.addEventListener('load', function() {
     controls.update();
 
     // Lighting
+    const softLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    softLight.position.set(3, 5, 5);
+    scene.add(softLight);
     const ambient = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambient);
     const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 2.0);
