@@ -41,8 +41,6 @@ html body {
   padding-bottom: 1.5em;
 }
 
-
-
 .results-carousel {
   overflow: hidden;
 }
@@ -59,6 +57,40 @@ html body {
 
 .slider-pagination .slider-page {
   background: #000000;
+}
+
+.video-gallery-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gallery-nav {
+  background: #0008;
+  border: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 20px;
+  border-radius: 6px;
+}
+
+.video-viewport {
+  overflow: hidden;        /* 5 video width */
+  width: calc(200px * 5);  /* video width 200px */
+}
+
+.video-gallery {
+  display: flex;
+  transition: transform 0.4s ease;
+}
+
+.gallery-video {
+  width: 200px;
+  height: 120px;
+  object-fit: cover;
+  margin-right: 5px;
 }
 
 .bibtex-block pre {
