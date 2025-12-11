@@ -78,7 +78,7 @@ html body {
 
 .video-viewport {
   overflow: hidden;        /* 5 video width */
-  width: calc(180px * 5 + 16px * 4);  /* video width 200px */
+  width: calc(170px * 5 + 16px * 4);  /* video width */
 }
 
 .video-gallery {
@@ -88,7 +88,7 @@ html body {
 }
 
 .video-item {
-  width: 180px;
+  width: 170px;
   flex-shrink: 0;
   text-align: center;
 }
