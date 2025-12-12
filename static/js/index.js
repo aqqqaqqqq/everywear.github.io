@@ -59,7 +59,7 @@ window.addEventListener('load', function() {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 0.8, 0);
     controls.enableReset = false;
-    controls.minDistance = 2.0;
+    controls.minDistance = 1.0;
     controls.maxDistance = 5.0;
     controls.update();
 
@@ -68,7 +68,7 @@ window.addEventListener('load', function() {
     keyLight.position.set(3, 5, 5);
     scene.add(keyLight);
     
-    const fillLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
     fillLight.position.set(-4, 2, -3);
     scene.add(fillLight);
     
@@ -148,7 +148,6 @@ window.addEventListener('load', function() {
                             newMaterial.needsUpdate = true;
                             newMaterial.roughness = 1.0;      // 降低粗糙度
                             newMaterial.metalness = 0.0;      // 无金属感
-                            newMaterial.envMapIntensity = 1.0; // 环境贴图强度
                             child.material = newMaterial;
                         }
                         child.geometry.attributes.color.needsUpdate = true;
