@@ -142,8 +142,8 @@ window.addEventListener('load', function() {
                     if (child.isMesh && child.geometry && child.geometry.attributes.color) {
                         if (child.material) {
                             const newMaterial = child.material.clone();
-                            newMaterial.emissive = new THREE.Color(0x111111);  // 增加自发光
-                            newMaterial.emissiveIntensity = 0.2;              // 自发光强度
+                            // newMaterial.emissive = new THREE.Color(0x111111);  // 增加自发光
+                            // newMaterial.emissiveIntensity = 0.2;              // 自发光强度
                             newMaterial.vertexColors = true;
                             newMaterial.needsUpdate = true;
                             newMaterial.roughness = 0.7;      // 降低粗糙度
