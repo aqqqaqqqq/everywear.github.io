@@ -170,7 +170,7 @@ window.addEventListener('load', function() {
             const center = new THREE.Vector3();
             box.getCenter(center);
     
-            camera.position.set(center.x, center.y, center.z + 3);
+            camera.position.set(center.x, center.y + 1.5, center.z + 3);
             controls.target.copy(center);
             controls.update();
         }, undefined, err => {
