@@ -159,32 +159,19 @@ window.addEventListener('load', function() {
             }
             
             scene.add(currentModel);
-
-            let centerStart = new THREE.Vector3();
-            let centerEnd = new THREE.Vector3();
-        
-            const boxStart = new THREE.Box3().setFromObject(currentModel);
-            boxStart.getCenter(centerStart);
-        
+    
             if (gltf.animations && gltf.animations.length > 0) {
-                const clip = gltf.animations[0];
                 mixer = new THREE.AnimationMixer(currentModel);
-                const action = mixer.clipAction(clip);
-                mixer.setTime(clip.duration);
-                const boxEnd = new THREE.Box3().setFromObject(currentModel);
-                boxEnd.getCenter(centerEnd);
-                mixer.setTime(0);
+                const action = mixer.clipAction(gltf.animations[0]);
                 action.play();
             }
     
-            const fixedCenter = new THREE.Vector3(
-                (centerStart.x + centerEnd.x) / 2,
-                (centerStart.y + centerEnd.y) / 2,
-                (centerStart.z + centerEnd.z) / 2
-            );
+            const box = new THREE.Box3().setFromObject(currentModel);
+            const center = new THREE.Vector3();
+            box.getCenter(center);
     
-            camera.position.set(fixedCenter.x, fixedCenter.y + 3, fixedCenter.z + 3);
-            controls.target.copy(fixedCenter);
+            camera.position.set(center.x, center.y + 3, center.z + 3);
+            controls.target.copy(center);
             controls.update();
         }, undefined, err => {
             console.error("Failed to load GLB:", err);
